@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Bigpipe示例</title>
+  <script>
+    var Bigpipe =function(){
+      this.callBacks = {};
+    }
+
+    Bigpipe.prototype.ready = function (key, callback){
+      if(!this.callBacks[key]){
+        this.callBacks[key] = [];
+      }
+      this.callBacks[key].push(callback);
+    }
+
+    Bigpipe.prototype.set = function(key, data){
+      var callBacks = this.callBacks[key] || [];
+      for (var i = 0; i < callBacks.length; i++) {
+        callBacks[i].call(this,data);
+        
+      }
+    }
+ </script>
+</head>
+<body>
+  <h1>持续输出测试</h1>
+  <h3>one</h3>
+  <scipt>
+    <div id="articles"><%= articles%></div>
+  </scipt>
+  <h3>two</h3>
+  <scipt>
+    <div id="user"><%= user%></div>
+  </scipt>
+  <script>
+    var bigpipe = new Bigpipe()
+    bigpipe.ready("articles",function(data){
+      document.getElementById("articles").innerHTML = data
+    })
+    bigpipe.ready("user",function(data){
+      document.getElementById("user").innerHTML = data
+    })
+  </script>
+ 
+</body>
+</html>
